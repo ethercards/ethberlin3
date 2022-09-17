@@ -24,6 +24,8 @@ export type { ERC165 } from "./@openzeppelin/contracts/utils/introspection/ERC16
 export { ERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/ERC165__factory";
 export type { IERC165 } from "./@openzeppelin/contracts/utils/introspection/IERC165";
 export { IERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/IERC165__factory";
+export type { ContractManager2 } from "./contracts/ContactManager2.sol/ContractManager2";
+export { ContractManager2__factory } from "./factories/contracts/ContactManager2.sol/ContractManager2__factory";
 export type { ContractManager } from "./contracts/ContractManager.sol/ContractManager";
 export { ContractManager__factory } from "./factories/contracts/ContractManager.sol/ContractManager__factory";
 export type { MIERC721 } from "./contracts/ContractManager.sol/MIERC721";
