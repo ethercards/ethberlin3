@@ -10,7 +10,7 @@ import "hardhat/console.sol";
 
 contract NFTToolbox is ERC721Enumerable, Ownable{ 
     using Strings for uint256;
-
+    uint public counter;
     constructor() ERC721("ETH_Berlin", "ETHB") {
     }
     
@@ -29,8 +29,6 @@ contract NFTToolbox is ERC721Enumerable, Ownable{
     }
 
     function mint(uint256 _newItemId) public {
-        console.log("Hello1");
-
         require(!_exists(_newItemId), "ERC721: token already exists");
         _mint(msg.sender, _newItemId);
     }
@@ -42,12 +40,16 @@ contract NFTToolbox is ERC721Enumerable, Ownable{
     }
 
     function batchMint(uint256[] calldata _newItemIds, address recipient) public {
-        console.log("Hello1");
         for(uint256 i = 0; i < _newItemIds.length; i++) {
-            console.log("Hello2");
             mint(_newItemIds[i], recipient);
         }
     }
-
-
+   
+   
+    
+    
+    function increase() public {
+        counter++;
+    }
+    
 }

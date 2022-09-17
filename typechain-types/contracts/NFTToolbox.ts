@@ -32,7 +32,9 @@ export interface NFTToolboxInterface extends utils.Interface {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "batchMint(uint256[],address)": FunctionFragment;
+    "counter()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
+    "increase()": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "mint(uint256,address)": FunctionFragment;
     "mint(uint256)": FunctionFragment;
@@ -58,7 +60,9 @@ export interface NFTToolboxInterface extends utils.Interface {
       | "approve"
       | "balanceOf"
       | "batchMint"
+      | "counter"
       | "getApproved"
+      | "increase"
       | "isApprovedForAll"
       | "mint(uint256,address)"
       | "mint(uint256)"
@@ -91,10 +95,12 @@ export interface NFTToolboxInterface extends utils.Interface {
     functionFragment: "batchMint",
     values: [PromiseOrValue<BigNumberish>[], PromiseOrValue<string>]
   ): string;
+  encodeFunctionData(functionFragment: "counter", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getApproved",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
+  encodeFunctionData(functionFragment: "increase", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
@@ -175,10 +181,12 @@ export interface NFTToolboxInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "batchMint", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "counter", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "increase", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isApprovedForAll",
     data: BytesLike
@@ -342,10 +350,16 @@ export interface NFTToolbox extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    counter(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    increase(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
@@ -453,10 +467,16 @@ export interface NFTToolbox extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  counter(overrides?: CallOverrides): Promise<BigNumber>;
+
   getApproved(
     tokenId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  increase(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   isApprovedForAll(
     owner: PromiseOrValue<string>,
@@ -564,10 +584,14 @@ export interface NFTToolbox extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    counter(overrides?: CallOverrides): Promise<BigNumber>;
+
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    increase(overrides?: CallOverrides): Promise<void>;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
@@ -718,9 +742,15 @@ export interface NFTToolbox extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    counter(overrides?: CallOverrides): Promise<BigNumber>;
+
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    increase(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     isApprovedForAll(
@@ -830,9 +860,15 @@ export interface NFTToolbox extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    counter(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    increase(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     isApprovedForAll(
