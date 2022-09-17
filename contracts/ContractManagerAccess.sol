@@ -5,8 +5,16 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol"; 
 
 abstract contract ContractManagerAccess is Ownable {
-    // only owner of ContractManager can add new admins (and transfer it's ownership)
-    // any admin can updateAccess() (add new authorization)
+    //
+    // Access control
+    //
+    // Only owner of ContractManager can add new admins (and transfer it's ownership)
+    // Any admin can updateAccess() (add new authorization)
+    //
+
+    /*
+    *   Library
+    */
 
     using EnumerableSet for EnumerableSet.AddressSet;
     using EnumerableSet for EnumerableSet.Bytes32Set;
@@ -79,34 +87,16 @@ abstract contract ContractManagerAccess is Ownable {
     // Read contracts
     function getContracts() public view returns (address[] memory) {
         return contracts.values();
-        // uint256 len = EnumerableSet.length(contracts);
-        // address[] memory retval = new address[](len);
-        // for(uint16 i = 0; i < len; i++) {
-        //     retval[i] = EnumerableSet.at(contracts, i);
-        // }
-        // return retval;
     }
 
     // Read users
     function getUsers() public view returns (address[] memory) {
         return users.values();
-        // uint256 len = EnumerableSet.length(users);
-        // address[] memory retval = new address[](len);
-        // for(uint16 i = 0; i < len; i++) {
-        //     retval[i] = EnumerableSet.at(users, i);
-        // }
-        // return retval;
     }
 
     // Read functions
     function getFunctions() public view returns (bytes32[] memory) {
         return functions.values();
-        // uint256 len = EnumerableSet.length(functions);
-        // bytes32[] memory retval = new bytes32[](len);
-        // for(uint16 i = 0; i < len; i++) {
-        //     retval[i] = EnumerableSet.at(functions, i);
-        // }
-        // return retval;
     }
 
     /*
