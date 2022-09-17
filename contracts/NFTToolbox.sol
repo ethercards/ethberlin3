@@ -29,12 +29,12 @@ contract NFTToolbox is ERC721Enumerable, Ownable{
     }
 
     function mint(uint256 _newItemId) public {
+
         require(!_exists(_newItemId), "ERC721: token already exists");
         _mint(msg.sender, _newItemId);
     }
 
     function mint(uint256 _newItemId, address recipient) public {
-
         require(!_exists(_newItemId), "ERC721: token already exists");
         _mint(recipient, _newItemId);
     }

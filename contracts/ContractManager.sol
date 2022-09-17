@@ -13,8 +13,6 @@ contract ContractManager is Ownable {
     event RequestCompelted(bytes indexed data);
 
 
- 
-
     function batchCall(bytes memory bytesData) public {
 
         uint16 numberOfCalls;
