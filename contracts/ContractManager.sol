@@ -2,12 +2,14 @@ pragma solidity = 0.8.13;
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
+import "hardhat/console.sol";
+import "./ContractManagerAccess.sol";
 
 interface mIERC721 {
     function mint(uint256 _newItemId) external;
 
 }
-contract ContractManager is Ownable {
+contract ContractManager is ContractManagerAccess {
     
     error RequestFailed(uint16 id);
     event RequestCompelted(bytes indexed data);
@@ -46,6 +48,16 @@ contract ContractManager is Ownable {
                 ptr := add( ptr, 32 )
             }
 
+            // Validate contract access!
+            // require(
+            //     hasAccess(
+            //                 address _contractAddress,
+            //                 bytes4  _functionId,
+            //                 address _userWallet
+            //     ),
+            //     "Not Authorised"
+            // );
+
             bool success;
             assembly {
 
@@ -73,10 +85,5 @@ contract ContractManager is Ownable {
             emit RequestCompelted(bytesData);
         }
 
-    }
-
-    function checkAccess(address _contractAdress, bytes4 _fnHash, address _functionCaller) public returns (bool){
-        //console.log("Test");
-        return true;
     }
 }

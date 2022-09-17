@@ -3,9 +3,8 @@ pragma solidity = 0.8.13;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol"; 
-import "hardhat/console.sol";
 
-contract ContractManager2 is Ownable {
+abstract contract ContractManagerAccess is Ownable {
     // only owner of ContractManager can add new admins (and transfer it's ownership)
     // any admin can updateAccess() (add new authorization)
 
@@ -13,7 +12,7 @@ contract ContractManager2 is Ownable {
     using EnumerableSet for EnumerableSet.Bytes32Set;
 
     /*
-    *   Data
+    *   Types
     */
 
     struct accessStruct {
@@ -22,6 +21,10 @@ contract ContractManager2 is Ownable {
         address userWallet;     // address of the smart contract that will implement extra functionality
         bool    value;
     }
+
+    /*
+    *   Data
+    */
 
     // Set for admin addresses
     EnumerableSet.AddressSet admins;
@@ -35,22 +38,6 @@ contract ContractManager2 is Ownable {
     // Set for managed functions
     EnumerableSet.Bytes32Set functions;
 
-
-    //.      contract           userWallet
-    // ...mapping(address => mapping(address => functionSet))
-
-//    userWalletSet
-//    contractAddressSet
-
-//    mapping(address => mapping(bytes4 => mapping(address => bool)) ) public access;
-
-// src      dst.    fn
-//addressesCount =1
-//mapping(uint256 => address) addressToId
-//mapping(uint256 => address) addressIdToDST
-
-   // mapping(address => mapping(bytes4 => mapping(address => bool)) ) public access;
-
     mapping(address => mapping(address => EnumerableSet.Bytes32Set) ) access;
 
     /*
@@ -59,7 +46,6 @@ contract ContractManager2 is Ownable {
 
     event accessUpdatedEvent(accessStruct _access);
     event adminEvent(address _address, bool mode);
-
 
     /*
     *   Controlling the "Admin" authorization
@@ -93,8 +79,6 @@ contract ContractManager2 is Ownable {
     // Read contracts
     function getContracts() public view returns (address[] memory) {
         return contracts.values();
-
-
         // uint256 len = EnumerableSet.length(contracts);
         // address[] memory retval = new address[](len);
         // for(uint16 i = 0; i < len; i++) {
@@ -106,7 +90,6 @@ contract ContractManager2 is Ownable {
     // Read users
     function getUsers() public view returns (address[] memory) {
         return users.values();
-
         // uint256 len = EnumerableSet.length(users);
         // address[] memory retval = new address[](len);
         // for(uint16 i = 0; i < len; i++) {
@@ -118,7 +101,6 @@ contract ContractManager2 is Ownable {
     // Read functions
     function getFunctions() public view returns (bytes32[] memory) {
         return functions.values();
-
         // uint256 len = EnumerableSet.length(functions);
         // bytes32[] memory retval = new bytes32[](len);
         // for(uint16 i = 0; i < len; i++) {
@@ -173,6 +155,5 @@ contract ContractManager2 is Ownable {
         );
         _;
     }
-
 }
 
