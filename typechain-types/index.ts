@@ -24,7 +24,9 @@ export type { ERC165 } from "./@openzeppelin/contracts/utils/introspection/ERC16
 export { ERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/ERC165__factory";
 export type { IERC165 } from "./@openzeppelin/contracts/utils/introspection/IERC165";
 export { IERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/IERC165__factory";
-export type { ChainBatchWriteAdapter } from "./contracts/ContactManager.sol/ChainBatchWriteAdapter";
-export { ChainBatchWriteAdapter__factory } from "./factories/contracts/ContactManager.sol/ChainBatchWriteAdapter__factory";
+export type { ContractManager } from "./contracts/ContractManager.sol/ContractManager";
+export { ContractManager__factory } from "./factories/contracts/ContractManager.sol/ContractManager__factory";
+export type { MIERC721 } from "./contracts/ContractManager.sol/MIERC721";
+export { MIERC721__factory } from "./factories/contracts/ContractManager.sol/MIERC721__factory";
 export type { NFTToolbox } from "./contracts/NFTToolbox";
 export { NFTToolbox__factory } from "./factories/contracts/NFTToolbox__factory";

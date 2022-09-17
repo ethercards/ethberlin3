@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
+import "hardhat/console.sol";
 
 
 contract NFTToolbox is ERC721Enumerable, Ownable{ 
@@ -28,17 +29,22 @@ contract NFTToolbox is ERC721Enumerable, Ownable{
     }
 
     function mint(uint256 _newItemId) public {
+        console.log("Hello1");
+
         require(!_exists(_newItemId), "ERC721: token already exists");
         _mint(msg.sender, _newItemId);
     }
 
     function mint(uint256 _newItemId, address recipient) public {
+
         require(!_exists(_newItemId), "ERC721: token already exists");
         _mint(recipient, _newItemId);
     }
 
     function batchMint(uint256[] calldata _newItemIds, address recipient) public {
+        console.log("Hello1");
         for(uint256 i = 0; i < _newItemIds.length; i++) {
+            console.log("Hello2");
             mint(_newItemIds[i], recipient);
         }
     }

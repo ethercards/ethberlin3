@@ -49,9 +49,13 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165__factory>;
     getContractFactory(
-      name: "ChainBatchWriteAdapter",
+      name: "ContractManager",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ChainBatchWriteAdapter__factory>;
+    ): Promise<Contracts.ContractManager__factory>;
+    getContractFactory(
+      name: "MIERC721",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MIERC721__factory>;
     getContractFactory(
       name: "NFTToolbox",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -103,10 +107,15 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IERC165>;
     getContractAt(
-      name: "ChainBatchWriteAdapter",
+      name: "ContractManager",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.ChainBatchWriteAdapter>;
+    ): Promise<Contracts.ContractManager>;
+    getContractAt(
+      name: "MIERC721",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.MIERC721>;
     getContractAt(
       name: "NFTToolbox",
       address: string,
