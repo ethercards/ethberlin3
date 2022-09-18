@@ -46,7 +46,7 @@ abstract contract ContractManagerAccess is Ownable {
     struct accessStruct {
         address contractAddress;
         bytes4  functionId;
-        address userWallet;     // address of the smart contract that will implement extra functionality
+        address userWallet;
         bool    value;
     }
 
@@ -73,7 +73,7 @@ abstract contract ContractManagerAccess is Ownable {
     */
 
     event accessUpdatedEvent(accessStruct _access);
-    event adminEvent(address _address, bool mode);
+    event adminEvent(address _address, bool _mode);
 
     /*
     *   Controlling the "Admin" authorization
@@ -124,7 +124,7 @@ abstract contract ContractManagerAccess is Ownable {
     */
 
     /// @notice Batch adds right(s) for user(s) to call function(s) in one of its child contract
-    /// @param _newAccess Array of tupples to add authorization:
+    /// @param _newAccess Array of tuples to add authorization:
     ///         - address contractAddress;
     ///         - bytes4  functionId;
     ///         - address userWallet;
@@ -143,7 +143,6 @@ abstract contract ContractManagerAccess is Ownable {
                 access[_newAccess[i].contractAddress][_newAccess[i].userWallet].remove(_newAccess[i].functionId);
             }
 
-            //access[_newAccess[i].contractAddress][_newAccess[i].functionId][_newAccess[i].userWallet] = _newAccess[i].value; 
             emit accessUpdatedEvent(_newAccess[i]);
         }
     }
