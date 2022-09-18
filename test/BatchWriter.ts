@@ -80,17 +80,10 @@ describe("Batch Writer functionality", function () {
 
         let callPayload1= generateCallData(TestContract.address, TestContract.interface.encodeFunctionData("mint(uint256,address)",[1,owner.address]))
         let callPayload2= generateCallData(TestContract2.address, TestContract2.interface.encodeFunctionData("batchMint(uint256[],address)",[[2,4,5],owner.address]))
-       
-        let access = [];
-        let accessRow = [TestContract.address, '0x94bf804d', addr2.address, true];
-        access.push(accessRow);
 
         const numberOfCalls = callLentoHex(2*2) 
        
-        const packet = "0x"+numberOfCalls +callPayload1+callPayload2;
-        let contractOwner = await ContractManager.owner()
-        console.log(contractOwner)
-        console.log(owner.address)
+        const packet = "0x"+numberOfCalls +callPayload1+callPayload2;        
         await ContractManager.connect(addr1).batchCall(packet)
 
     })
@@ -127,6 +120,25 @@ describe("Batch Writer functionality", function () {
         
         await expect(ContractManager.connect(addr2).batchCall(packet)).to.be.reverted
 
+    })
+
+    it("Admin should be able to call all functions", async function (){
+        let callPayload1= generateCallData(TestContract.address, TestContract.interface.encodeFunctionData("mint(uint256,address)",[1,owner.address]))
+        let callPayload2= generateCallData(TestContract2.address, TestContract2.interface.encodeFunctionData("batchMint(uint256[],address)",[[2,4,5],owner.address]))
+
+        const numberOfCalls = callLentoHex(2*2) 
+       
+        const packet = "0x"+numberOfCalls +callPayload1+callPayload2;
+        await ContractManager.batchCall(packet)
+    })
+
+    it("Should not allow transfering ownership of the contracts managed by the ContractManager", async function(){
+        let callPayload1= generateCallData(TestContract.address, TestContract.interface.encodeFunctionData("transferOwnership(address)",[addr1.address]))
+       
+        const numberOfCalls = callLentoHex(1*2) 
+       
+        const packet = "0x"+numberOfCalls +callPayload1;
+        await expect(ContractManager.batchCall(packet)).to.be.reverted
     })
 
 
