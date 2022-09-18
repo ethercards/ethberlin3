@@ -16,7 +16,7 @@ contract ContractManager is ContractManagerAccess {
 
 
     function batchCall(bytes memory bytesData) public {
-
+   
         uint16 numberOfCalls;
 
         uint256 ptr;
@@ -37,6 +37,7 @@ contract ContractManager is ContractManagerAccess {
         for(uint8 i = 0; i < numberOfCalls; i++) {
             uint256 dataLength;
             address toAddress;
+            bytes4 fnHash;
             assembly {
 
                 // ( 2 bytes ) load calldata length 
@@ -46,17 +47,20 @@ contract ContractManager is ContractManagerAccess {
                 // ( 32 bytes ) load our address into a stack variable that our call can use
                 toAddress := mload( ptr )
                 ptr := add( ptr, 32 )
+                fnHash := mload(ptr)
             }
+            console.logBytes4(fnHash);
+            console.log(msg.sender);
 
             // Validate contract access!
-            // require(
-            //     hasAccess(
-            //                 address _contractAddress,
-            //                 bytes4  _functionId,
-            //                 address _userWallet
-            //     ),
-            //     "Not Authorised"
-            // );
+            require(
+                hasAccess(
+                            toAddress,
+                            fnHash,
+                            msg.sender
+                ),
+                "Not Authorised"
+            );
 
             bool success;
             assembly {

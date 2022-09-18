@@ -24,11 +24,11 @@ export type { ERC165 } from "./@openzeppelin/contracts/utils/introspection/ERC16
 export { ERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/ERC165__factory";
 export type { IERC165 } from "./@openzeppelin/contracts/utils/introspection/IERC165";
 export { IERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/IERC165__factory";
-export type { ContractManagerAccess } from "./contracts/ContactManager2.sol/ContractManagerAccess";
-export { ContractManagerAccess__factory } from "./factories/contracts/ContactManager2.sol/ContractManagerAccess__factory";
 export type { ContractManager } from "./contracts/ContractManager.sol/ContractManager";
 export { ContractManager__factory } from "./factories/contracts/ContractManager.sol/ContractManager__factory";
 export type { MIERC721 } from "./contracts/ContractManager.sol/MIERC721";
 export { MIERC721__factory } from "./factories/contracts/ContractManager.sol/MIERC721__factory";
+export type { ContractManagerAccess } from "./contracts/ContractManagerAccess";
+export { ContractManagerAccess__factory } from "./factories/contracts/ContractManagerAccess__factory";
 export type { NFTToolbox } from "./contracts/NFTToolbox";
 export { NFTToolbox__factory } from "./factories/contracts/NFTToolbox__factory";

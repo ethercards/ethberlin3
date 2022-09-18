@@ -39,14 +39,11 @@ describe("Batch Writer functionality", function () {
 
     let TestContract: any;
     let TestContract2: any;
-    let TestContract3: any;
+
     let ContractManager: any;
     let owner:any;
     let addr1:any;
     let addr2:any;
-    const numberOfTestsToRun = 10;
-    let gasUsedBatch:number;
-    let gasUsedDirect:number
 
 
     beforeEach(async () => {
@@ -66,34 +63,37 @@ describe("Batch Writer functionality", function () {
         const contractmanagerArtifacts = await ethers.getContractFactory("ContractManager");
         ContractManager = await contractmanagerArtifacts.deploy();
         await ContractManager.deployed();
+        console.log(TestContract.address,owner.address)
 
+        let access = [];
+        let accessRow = [TestContract.address, '0x94bf804d', addr1.address, true];
+        access.push(accessRow);
+        accessRow = [TestContract2.address, '0xeb699f22', addr1.address, true];
+        access.push(accessRow);
+        
+        await ContractManager.updateAccess(access);
+        console.log("..")
 
  
 
     });
-    it("Should be able to multiple calls across multiple contracs with one transaction ", async function (){
+    it("Should be able to multiple calls across multiple contracts with one transaction ", async function (){
 
-        
-        let call = [TestContract.address, TestContract.interface.encodeFunctionData("mint(uint256,address)",[1,owner.address])]
-        let call2 = [TestContract2.address, TestContract2.interface.encodeFunctionData("batchMint(uint256[],address)",[[2,4,5],owner.address])]
-        
+        let callPayload1= generateCallData(TestContract.address, TestContract.interface.encodeFunctionData("mint(uint256,address)",[1,owner.address]))
+        let callPayload2= generateCallData(TestContract2.address, TestContract2.interface.encodeFunctionData("batchMint(uint256[],address)",[[2,4,5],owner.address]))
        
         const numberOfCalls = callLentoHex(2*2) 
-        const callLen = callLentoHex(removeZeroX(call[1]).length);
-        const address = addresstoCallData(call[0]);
-        const callData = removeZeroX(call[1]);
-        const callLen2 = callLentoHex(removeZeroX(call2[1]).length);
-        const address2 = addresstoCallData(call2[0]);
-        const callData2 = removeZeroX(call2[1]);
-
-        const packet = "0x"+numberOfCalls +callLen + address + callData+callLen2 + address2 + callData2;
-
-        await ContractManager.batchCall(packet)
-
-        let text= await TestContract.totalSupply()
+       
+        const packet = "0x"+numberOfCalls +callPayload1+callPayload2;
+        let contractOwner = await ContractManager.owner()
+        console.log(contractOwner)
+        console.log(owner.address)
+        await ContractManager.connect(addr1).batchCall(packet)
 
         expect(await TestContract.balanceOf(owner.address)).to.equal(1)
         expect(await TestContract2.balanceOf(owner.address)).to.equal(3)
     })
+
+
 
 });
