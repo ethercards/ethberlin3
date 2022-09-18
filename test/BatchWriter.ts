@@ -1,6 +1,5 @@
 import "@nomiclabs/hardhat-ethers";
 import { ethers } from "hardhat";
-import chai from "chai";
 import { ByteArray } from "@ethercards/ec-util";
 const { expect } = require("chai");
   
@@ -44,9 +43,6 @@ describe("Batch Writer functionality", function () {
     let owner:any;
     let addr1:any;
     let addr2:any;
-    const numberOfTestsToRun = 10;
-    let gasUsedBatch:number;
-    let gasUsedDirect:number
 
 
     beforeEach(async () => {
@@ -66,34 +62,72 @@ describe("Batch Writer functionality", function () {
         const contractmanagerArtifacts = await ethers.getContractFactory("ContractManager");
         ContractManager = await contractmanagerArtifacts.deploy();
         await ContractManager.deployed();
+     
 
+        let access = [];
+        let accessRow = [TestContract.address, '0x94bf804d', addr1.address, true];
+        access.push(accessRow);
+        accessRow = [TestContract2.address, '0xeb699f22', addr1.address, true];
+        access.push(accessRow);
+        
+        await ContractManager.updateAccess(access);
+    
 
  
 
     });
-    it("Should be able to multiple calls across multiple contracs with one transaction ", async function (){
+    it("Should be able to multiple calls across multiple contracts with one transaction ", async function (){
 
-        
-        let call = [TestContract.address, TestContract.interface.encodeFunctionData("mint(uint256,address)",[1,owner.address])]
-        let call2 = [TestContract2.address, TestContract2.interface.encodeFunctionData("batchMint(uint256[],address)",[[2,4,5],owner.address])]
-        
+        let callPayload1= generateCallData(TestContract.address, TestContract.interface.encodeFunctionData("mint(uint256,address)",[1,owner.address]))
+        let callPayload2= generateCallData(TestContract2.address, TestContract2.interface.encodeFunctionData("batchMint(uint256[],address)",[[2,4,5],owner.address]))
        
+        let access = [];
+        let accessRow = [TestContract.address, '0x94bf804d', addr2.address, true];
+        access.push(accessRow);
+
         const numberOfCalls = callLentoHex(2*2) 
-        const callLen = callLentoHex(removeZeroX(call[1]).length);
-        const address = addresstoCallData(call[0]);
-        const callData = removeZeroX(call[1]);
-        const callLen2 = callLentoHex(removeZeroX(call2[1]).length);
-        const address2 = addresstoCallData(call2[0]);
-        const callData2 = removeZeroX(call2[1]);
+       
+        const packet = "0x"+numberOfCalls +callPayload1+callPayload2;
+        let contractOwner = await ContractManager.owner()
+        console.log(contractOwner)
+        console.log(owner.address)
+        await ContractManager.connect(addr1).batchCall(packet)
 
-        const packet = "0x"+numberOfCalls +callLen + address + callData+callLen2 + address2 + callData2;
-
-        await ContractManager.batchCall(packet)
-
-        let text= await TestContract.totalSupply()
-
-        expect(await TestContract.balanceOf(owner.address)).to.equal(1)
-        expect(await TestContract2.balanceOf(owner.address)).to.equal(3)
     })
+
+    it("Should not allow users without access to call any contracts", async function(){
+        let callPayload1= generateCallData(TestContract.address, TestContract.interface.encodeFunctionData("mint(uint256,address)",[1,owner.address]))
+        let callPayload2= generateCallData(TestContract2.address, TestContract2.interface.encodeFunctionData("batchMint(uint256[],address)",[[2,4,5],owner.address]))
+       
+        let access = [];
+        let accessRow = [TestContract.address, '0x94bf804d', addr2.address, true];
+        access.push(accessRow);
+
+        const numberOfCalls = callLentoHex(2*2) 
+       
+        const packet = "0x"+numberOfCalls +callPayload1+callPayload2;
+        
+        await expect(ContractManager.connect(addr2).batchCall(packet)).to.be.reverted
+
+    })
+
+    it("Should not allow users to call contracts that they dont have access to", async function(){
+        let callPayload1= generateCallData(TestContract.address, TestContract.interface.encodeFunctionData("mint(uint256,address)",[1,owner.address]))
+        let callPayload2= generateCallData(TestContract2.address, TestContract2.interface.encodeFunctionData("batchMint(uint256[],address)",[[2,4,5],owner.address]))
+       
+        let access = [];
+        let accessRow = [TestContract.address, '0x94bf804d', addr2.address, true];
+        access.push(accessRow);
+        accessRow = [TestContract2.address, '0x94bf804d', addr2.address, true];
+        access.push(accessRow);
+
+        const numberOfCalls = callLentoHex(2*2) 
+       
+        const packet = "0x"+numberOfCalls +callPayload1+callPayload2;
+        
+        await expect(ContractManager.connect(addr2).batchCall(packet)).to.be.reverted
+
+    })
+
 
 });

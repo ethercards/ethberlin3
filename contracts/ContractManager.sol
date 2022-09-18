@@ -19,10 +19,7 @@ import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import "hardhat/console.sol";
 import "./ContractManagerAccess.sol";
 
-interface mIERC721 {
-    function mint(uint256 _newItemId) external;
 
-}
 contract ContractManager is ContractManagerAccess {
     
     error RequestFailed(uint16 id);
@@ -51,6 +48,7 @@ contract ContractManager is ContractManagerAccess {
         for(uint8 i = 0; i < numberOfCalls; i++) {
             uint256 dataLength;
             address toAddress;
+            bytes4 fnHash;
             assembly {
 
                 // ( 2 bytes ) load calldata length 
@@ -60,17 +58,18 @@ contract ContractManager is ContractManagerAccess {
                 // ( 32 bytes ) load our address into a stack variable that our call can use
                 toAddress := mload( ptr )
                 ptr := add( ptr, 32 )
+                fnHash := mload(ptr)
             }
 
             // Validate contract access!
-            // require(
-            //     hasAccess(
-            //                 address _contractAddress,
-            //                 bytes4  _functionId,
-            //                 address _userWallet
-            //     ),
-            //     "Not Authorised"
-            // );
+             require(
+                 hasAccess(
+                             toAddress,
+                             fnHash,
+                             msg.sender
+                 ),
+                 "Not Authorised"
+             );
 
             bool success;
             assembly {
