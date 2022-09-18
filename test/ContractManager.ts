@@ -6,7 +6,7 @@ import { ContractManager } from '../typechain-types'
 
 const RANDOM_CONTRACT_ADDRESS = '0x5B38Da6a701c568545dCfcB03FcB875f56beddC4';
 
-describe("contactManager", function () {
+describe("contractManager", function () {
 
     let contractManager: any;
     let access: any[] = [];
@@ -53,7 +53,7 @@ describe("contactManager", function () {
         access.push(accessRow);
         await contractManager.updateAccess(access);
 
-        const hasAccess = await contractManager.hasAccess(contractManager.address, '0x01010101', addr2.address);
+        const hasAccess = await contractManager.connect(addr1).hasAccess(contractManager.address, '0x01010101', addr2.address);
         expect(hasAccess).to.equal(false);
 
     });
