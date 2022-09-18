@@ -123,6 +123,12 @@ abstract contract ContractManagerAccess is Ownable {
     *   Control access information
     */
 
+    /// @notice Batch adds right(s) for user(s) to call function(s) in one of its child contract
+    /// @param _newAccess Array of tupples to add authorization:
+    ///         - address contractAddress;
+    ///         - bytes4  functionId;
+    ///         - address userWallet;
+    ///         - bool    value;
     function updateAccess(
         accessStruct[] calldata _newAccess
     ) public onlyAdmin {
