@@ -43,9 +43,8 @@ export declare namespace ContractManagerAccess {
   };
 }
 
-export interface ContractManagerInterface extends utils.Interface {
+export interface ContractManagerAccessInterface extends utils.Interface {
   functions: {
-    "batchCall(bytes)": FunctionFragment;
     "getAdminAt(uint256)": FunctionFragment;
     "getAdminContains(address)": FunctionFragment;
     "getAdminsLength()": FunctionFragment;
@@ -62,7 +61,6 @@ export interface ContractManagerInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
-      | "batchCall"
       | "getAdminAt"
       | "getAdminContains"
       | "getAdminsLength"
@@ -77,10 +75,6 @@ export interface ContractManagerInterface extends utils.Interface {
       | "updateAccess"
   ): FunctionFragment;
 
-  encodeFunctionData(
-    functionFragment: "batchCall",
-    values: [PromiseOrValue<BytesLike>]
-  ): string;
   encodeFunctionData(
     functionFragment: "getAdminAt",
     values: [PromiseOrValue<BigNumberish>]
@@ -128,7 +122,6 @@ export interface ContractManagerInterface extends utils.Interface {
     values: [ContractManagerAccess.AccessStructStruct[]]
   ): string;
 
-  decodeFunctionResult(functionFragment: "batchCall", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getAdminAt", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getAdminContains",
@@ -165,13 +158,11 @@ export interface ContractManagerInterface extends utils.Interface {
 
   events: {
     "OwnershipTransferred(address,address)": EventFragment;
-    "RequestCompelted(bytes)": EventFragment;
     "accessUpdatedEvent(tuple)": EventFragment;
     "adminEvent(address,bool)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RequestCompelted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "accessUpdatedEvent"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "adminEvent"): EventFragment;
 }
@@ -187,17 +178,6 @@ export type OwnershipTransferredEvent = TypedEvent<
 
 export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
-
-export interface RequestCompeltedEventObject {
-  data: string;
-}
-export type RequestCompeltedEvent = TypedEvent<
-  [string],
-  RequestCompeltedEventObject
->;
-
-export type RequestCompeltedEventFilter =
-  TypedEventFilter<RequestCompeltedEvent>;
 
 export interface accessUpdatedEventEventObject {
   _access: ContractManagerAccess.AccessStructStructOutput;
@@ -221,12 +201,12 @@ export type adminEventEvent = TypedEvent<
 
 export type adminEventEventFilter = TypedEventFilter<adminEventEvent>;
 
-export interface ContractManager extends BaseContract {
+export interface ContractManagerAccess extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: ContractManagerInterface;
+  interface: ContractManagerAccessInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -248,11 +228,6 @@ export interface ContractManager extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    batchCall(
-      bytesData: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     getAdminAt(
       _index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -300,11 +275,6 @@ export interface ContractManager extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
-
-  batchCall(
-    bytesData: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
 
   getAdminAt(
     _index: PromiseOrValue<BigNumberish>,
@@ -354,11 +324,6 @@ export interface ContractManager extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    batchCall(
-      bytesData: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     getAdminAt(
       _index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -415,13 +380,6 @@ export interface ContractManager extends BaseContract {
       newOwner?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
 
-    "RequestCompelted(bytes)"(
-      data?: PromiseOrValue<BytesLike> | null
-    ): RequestCompeltedEventFilter;
-    RequestCompelted(
-      data?: PromiseOrValue<BytesLike> | null
-    ): RequestCompeltedEventFilter;
-
     "accessUpdatedEvent(tuple)"(_access?: null): accessUpdatedEventEventFilter;
     accessUpdatedEvent(_access?: null): accessUpdatedEventEventFilter;
 
@@ -433,11 +391,6 @@ export interface ContractManager extends BaseContract {
   };
 
   estimateGas: {
-    batchCall(
-      bytesData: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     getAdminAt(
       _index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -487,11 +440,6 @@ export interface ContractManager extends BaseContract {
   };
 
   populateTransaction: {
-    batchCall(
-      bytesData: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     getAdminAt(
       _index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides

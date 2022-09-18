@@ -28,5 +28,7 @@ export type { ContractManager } from "./contracts/ContractManager.sol/ContractMa
 export { ContractManager__factory } from "./factories/contracts/ContractManager.sol/ContractManager__factory";
 export type { MIERC721 } from "./contracts/ContractManager.sol/MIERC721";
 export { MIERC721__factory } from "./factories/contracts/ContractManager.sol/MIERC721__factory";
+export type { ContractManagerAccess } from "./contracts/ContractManagerAccess";
+export { ContractManagerAccess__factory } from "./factories/contracts/ContractManagerAccess__factory";
 export type { NFTToolbox } from "./contracts/NFTToolbox";
 export { NFTToolbox__factory } from "./factories/contracts/NFTToolbox__factory";

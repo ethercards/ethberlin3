@@ -2,4 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as contractManagerSol from "./ContractManager.sol";
+export { ContractManagerAccess__factory } from "./ContractManagerAccess__factory";
 export { NFTToolbox__factory } from "./NFTToolbox__factory";

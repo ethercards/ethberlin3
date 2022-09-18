@@ -3,4 +3,5 @@
 /* eslint-disable */
 import type * as contractManagerSol from "./ContractManager.sol";
 export type { contractManagerSol };
+export type { ContractManagerAccess } from "./ContractManagerAccess";
 export type { NFTToolbox } from "./NFTToolbox";

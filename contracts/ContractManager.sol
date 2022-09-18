@@ -2,19 +2,21 @@ pragma solidity = 0.8.13;
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
+import "hardhat/console.sol";
+import "./ContractManagerAccess.sol";
 
 interface mIERC721 {
     function mint(uint256 _newItemId) external;
 
 }
-contract ContractManager is Ownable {
+contract ContractManager is ContractManagerAccess {
     
     error RequestFailed(uint16 id);
     event RequestCompelted(bytes indexed data);
 
 
     function batchCall(bytes memory bytesData) public {
-
+   
         uint16 numberOfCalls;
 
         uint256 ptr;
@@ -35,6 +37,7 @@ contract ContractManager is Ownable {
         for(uint8 i = 0; i < numberOfCalls; i++) {
             uint256 dataLength;
             address toAddress;
+            bytes4 fnHash;
             assembly {
 
                 // ( 2 bytes ) load calldata length 
@@ -44,7 +47,20 @@ contract ContractManager is Ownable {
                 // ( 32 bytes ) load our address into a stack variable that our call can use
                 toAddress := mload( ptr )
                 ptr := add( ptr, 32 )
+                fnHash := mload(ptr)
             }
+            console.logBytes4(fnHash);
+            console.log(msg.sender);
+
+            // Validate contract access!
+            require(
+                hasAccess(
+                            toAddress,
+                            fnHash,
+                            msg.sender
+                ),
+                "Not Authorised"
+            );
 
             bool success;
             assembly {
@@ -73,10 +89,5 @@ contract ContractManager is Ownable {
             emit RequestCompelted(bytesData);
         }
 
-    }
-
-    function checkAccess(address _contractAdress, bytes4 _fnHash, address _functionCaller) public returns (bool){
-        //console.log("Test");
-        return true;
     }
 }
