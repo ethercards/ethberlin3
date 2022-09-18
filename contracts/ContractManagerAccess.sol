@@ -9,7 +9,7 @@ pragma solidity = 0.8.13;
  *   ██████  ██ ██   ██ ██ ███████ ██                                                                                                                           
  *
  *
- * General Access Layer
+ * General Access Layer - Authorization management
  *
  * Galaxis tools
  */
