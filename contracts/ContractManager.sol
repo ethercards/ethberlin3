@@ -19,7 +19,16 @@ import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import "hardhat/console.sol";
 import "./ContractManagerAccess.sol";
 
-
+/// @title GAL - Generic Access Layer
+/// @author Galaxis
+/// @notice Implementing controlled batch calling funtionality for "write" functions
+/// @notice This helps build better UX and also saves gas (depending on use case)
+/// @notice - Only owner of ContractManager can add new admins
+/// @notice - Any admin can use updateAccess() to add new authorization
+/// @dev - Each child contract must be owned by the GAL
+///      - Their state changing functions need to be onlyOwner() protected
+//       - GAL protects transferOwnership and renounceOwnership from calling on
+///        it's child contracts
 contract ContractManager is ContractManagerAccess {
     
     error RequestFailed(uint16 id);

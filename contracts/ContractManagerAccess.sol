@@ -17,13 +17,17 @@ pragma solidity = 0.8.13;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol"; 
 
+/// @title GAL - Generic Access Layer (authorization abstract)
+/// @author Galaxis
+/// @notice Abstract class implementing authorization funtionality
+/// @notice Only owner of ContractManager can add new admins (and transfer it's ownership)
+/// @notice Any admin can use updateAccess() to add new authorization
+/// @dev - Each child contract must be owned by the GAL
+///      - Their state changing functions need to be onlyOwner() protected
+//       - GAL protects transferOwnership and renounceOwnership from calling on
+///        it's child contracts
+
 abstract contract ContractManagerAccess is Ownable {
-    //
-    // Access control
-    //
-    // Only owner of ContractManager can add new admins (and transfer it's ownership)
-    // Any admin can updateAccess() (add new authorization)
-    //
 
     /*
     *   Library
