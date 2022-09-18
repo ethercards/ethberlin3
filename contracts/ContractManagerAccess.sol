@@ -142,6 +142,11 @@ abstract contract ContractManagerAccess is Ownable {
         }
     }
 
+    /// @notice Checks if a user has the rights to call a function in a child contract
+    /// @dev The GAL owner may call anything besides transferOwnership and renounceOwnership functions
+    /// @param _contractAddress Address of the child contract to query
+    /// @param _functionId The first 4 byte of the encoded function interface
+    /// @param _userWallet Address of the user whose authorization to check
     function hasAccess(
         address _contractAddress,
         bytes4  _functionId,
