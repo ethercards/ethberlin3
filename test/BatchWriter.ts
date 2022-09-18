@@ -3,14 +3,11 @@ import { ethers } from "hardhat";
 import { ByteArray } from "@ethercards/ec-util";
 const { expect } = require("chai");
   
-
 function callLentoHex(number: number): string {
     const data = new ByteArray(Buffer.alloc(2));
     data.writeUnsignedShort(number/2);
     return removeZeroX(data.toString("hex"));
 }
-
-
 
 function addresstoCallData(string: string): string {
     return "000000000000000000000000"+removeZeroX(string);
@@ -31,9 +28,6 @@ function generateCallData(address: any, encodeFunctionData:any){
     return packet
 }
 
-
-
-
 describe("Batch Writer functionality", function () {
 
     let TestContract: any;
@@ -43,7 +37,6 @@ describe("Batch Writer functionality", function () {
     let owner:any;
     let addr1:any;
     let addr2:any;
-
 
     beforeEach(async () => {
     
@@ -57,13 +50,10 @@ describe("Batch Writer functionality", function () {
         await TestContract2.deployed();
         //console.log("          - Test contract address:      ", TestContract2.address);
 
-  
-
         const contractmanagerArtifacts = await ethers.getContractFactory("ContractManager");
         ContractManager = await contractmanagerArtifacts.deploy();
         await ContractManager.deployed();
      
-
         let access = [];
         let accessRow = [TestContract.address, '0x94bf804d', addr1.address, true];
         access.push(accessRow);
@@ -71,12 +61,10 @@ describe("Batch Writer functionality", function () {
         access.push(accessRow);
         
         await ContractManager.updateAccess(access);
-    
-
- 
 
     });
-    it("Should be able to multiple calls across multiple contracts with one transaction ", async function (){
+
+    it("Should be able to do multiple calls across multiple contracts with one transaction ", async function (){
 
         let callPayload1= generateCallData(TestContract.address, TestContract.interface.encodeFunctionData("mint(uint256,address)",[1,owner.address]))
         let callPayload2= generateCallData(TestContract2.address, TestContract2.interface.encodeFunctionData("batchMint(uint256[],address)",[[2,4,5],owner.address]))
@@ -140,6 +128,5 @@ describe("Batch Writer functionality", function () {
         const packet = "0x"+numberOfCalls +callPayload1;
         await expect(ContractManager.batchCall(packet)).to.be.reverted
     })
-
 
 });

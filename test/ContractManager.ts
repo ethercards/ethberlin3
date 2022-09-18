@@ -1,31 +1,23 @@
 import "@nomiclabs/hardhat-ethers";
 import { ethers } from "hardhat";
-import chai from "chai";
 const { expect } = require("chai");
-import { ContractManager } from '../typechain-types'
 
 const RANDOM_CONTRACT_ADDRESS = '0x5B38Da6a701c568545dCfcB03FcB875f56beddC4';
 
-describe("contractManager", function () {
+describe("ContractManager", function () {
 
     let contractManager: any;
     let access: any[] = [];
     let accessRow: any;
-    // let contractManager2: ContractManager2;
-    // let access: ContractManager2.AccessStructStructOutput[];
-    // let accessRow: ContractManager2.AccessStructStructOutput = new ContractManager2.AccessStructStructOutput();
-
     let owner: any;
     let addr1: any;
     let addr2: any;
-
 
     beforeEach(async () => {
     
         [owner, addr1,addr2] = await ethers.getSigners();
         const contractManagerArtifacts = await ethers.getContractFactory("ContractManager");
         contractManager = await contractManagerArtifacts.deploy();
-        // contractManager = (await contractManagerArtifacts.deploy()) as ContractManager2;
 
         await contractManager.deployed();
         // console.log("          - Contract Manager2 address:      ", contractManager.address);
@@ -104,6 +96,7 @@ describe("contractManager", function () {
 
         await expect(contractManager.connect(addr1).updateAccess(access))
         .to.be.revertedWith('Not Authorised');
+
     });
 
     it("Verify updateAccess for admins", async function (){
