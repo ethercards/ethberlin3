@@ -17,7 +17,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import "./ContractManagerAccess.sol";
 
-/// @title GAL - Generic Access Layer
+/// @title GAL - General Access Layer
 /// @author Galaxis
 /// @notice Implementing controlled batch calling funtionality for "write" functions
 /// @notice This helps build better UX and also saves gas (depending on use case)
@@ -53,6 +53,13 @@ contract ContractManager is ContractManagerAccess {
     /// @dev Reverts if any one function call reverts/unauthorized
     /// @param bytesData The byte array for the encoded call data
     ///                  Need to be prepared in the frontend library
+    ///
+    ///        Format:
+    ///          2 bytes: number of calls (uint16)
+    ///          2 bytes: length of next transaction (=n bytes) (uint16)
+    ///          n bytes: the transaction:
+    ///            32 bytes left padded address to call
+    ///            requested number of parameter (calldata)
     function batchCall(bytes memory bytesData) public {
 
         uint16 numberOfCalls;

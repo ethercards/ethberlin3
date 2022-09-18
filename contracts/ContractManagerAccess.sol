@@ -17,7 +17,7 @@ pragma solidity = 0.8.13;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol"; 
 
-/// @title GAL - Generic Access Layer (authorization abstract)
+/// @title GAL - General Access Layer (authorization abstract)
 /// @author Galaxis
 /// @notice Abstract class implementing authorization funtionality
 /// @notice Only owner of ContractManager can add new admins (and transfer it's ownership)
