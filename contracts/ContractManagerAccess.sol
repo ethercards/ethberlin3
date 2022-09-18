@@ -1,6 +1,19 @@
 //SPDX-License-Identifier: Unlicensed
 pragma solidity = 0.8.13;
 
+/* 
+ *   ██████      █████     ██                                                                                                                                   
+ *  ██          ██   ██    ██                                                                                                                                   
+ *  ██   ███    ███████    ██                                                                                                                                   
+ *  ██    ██    ██   ██    ██                                                                                                                                   
+ *   ██████  ██ ██   ██ ██ ███████ ██                                                                                                                           
+ *
+ *
+ * General Access Layer
+ *
+ * Galaxis tools
+ */
+
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol"; 
 
@@ -127,10 +140,18 @@ abstract contract ContractManagerAccess is Ownable {
         bytes4  _functionId,
         address _userWallet
     ) public view returns (bool result) {
+
+        // Protect transferOwnership and renounceOwnership functions!!
         if( _functionId == 0xf2fde38b || _functionId == 0x715018a6 ) {
-            // Protect transferOwnership and renounceOwnership functions!!
             return false;
         }
+
+        // GAL Owner can call anything (besides changing ownership)
+        if( msg.sender == owner() ) {
+            return true;
+        }
+
+        // Check access
         return access[_contractAddress][_userWallet].contains(_functionId);
     }
 
