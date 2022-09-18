@@ -26,6 +26,9 @@ import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 ///      - Their state changing functions need to be onlyOwner() protected
 //       - GAL protects transferOwnership and renounceOwnership from calling on
 ///        it's child contracts
+///      Emitted events:
+///      - adminEvent:         admins were added/removed
+///      - accessUpdatedEvent: user access was added/rewoked
 
 abstract contract ContractManagerAccess is Ownable {
 

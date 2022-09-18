@@ -25,16 +25,36 @@ import "./ContractManagerAccess.sol";
 /// @notice This helps build better UX and also saves gas (depending on use case)
 /// @notice - Only owner of ContractManager can add new admins
 /// @notice - Any admin can use updateAccess() to add new authorization
+/// @notice - If any called function in the batch fails or not authorized
+/// @notice   everything will be reverted!
 /// @dev - Each child contract must be owned by the GAL
 ///      - Their state changing functions need to be onlyOwner() protected
 //       - GAL protects transferOwnership and renounceOwnership from calling on
 ///        it's child contracts
+///      Emitted events:
+///      - RequestCompelted: all calls in the batch was successfully processed
+///      - RequestFailed:    a call in the batch failed
+///      - adminEvent:         admins were added/removed
+///      - accessUpdatedEvent: user access was added/rewoked
+
 contract ContractManager is ContractManagerAccess {
-    
+
+    /*
+    *   Data
+    */
+
     error RequestFailed(uint16 id);
+
+    /*
+    *   Events
+    */
+
     event RequestCompelted(bytes indexed data);
 
-
+    /// @notice Call all requested functions in batch
+    /// @dev Reverts if any one function call reverts/unauthorized
+    /// @param bytesData The byte array for the encoded call data
+    ///                  Need to be prepared in the frontend library
     function batchCall(bytes memory bytesData) public {
 
         uint16 numberOfCalls;
@@ -83,7 +103,6 @@ contract ContractManager is ContractManagerAccess {
             bool success;
             assembly {
 
-                // do we really need this ?
                 let x := mload(0x40)
 
                 // call(g, a, v, in, insize, out, outsize)
@@ -106,6 +125,5 @@ contract ContractManager is ContractManagerAccess {
             }
             emit RequestCompelted(bytesData);
         }
-
     }
 }
